@@ -19,9 +19,15 @@ class NetworkService private constructor() {
     val gson = Gson();
     private var client = OkHttpClient()
     companion object{
+        // singleton
         val instance = NetworkService();
     }
 
+    /**
+     * to call url and retrieve json,
+     * the result wil cache,
+     * and if the next request url already be calling, the application will use cache result
+     */
     fun getData(url: String, onComplete: (List<Image>?) -> Unit) {
         if (cacheUrl.containsKey(url))
             onComplete(toObject(cacheUrl[url]));
@@ -31,7 +37,6 @@ class NetworkService private constructor() {
                 .get()
                 .build()
             client.newCall(request)
-//                .execute()
                 .enqueue(
                     object : okhttp3.Callback {
                         override fun onFailure(call: okhttp3.Call, e: IOException) {}
@@ -48,15 +53,24 @@ class NetworkService private constructor() {
         }
     }
 
+    /**
+     * convert json to plain object
+     */
     fun toObject(json: String?): List<Image> {
         return gson.fromJson(json, Array<Image>::class.java).asList()
     }
 
+    /**
+     * a wrapper to execute UI thread method
+     */
     private fun runOnUiThread(callback: () -> Unit) {
         Handler(Looper.getMainLooper()).post { callback(); }
     }
 
-    fun getImage(url: String, view: ImageView) {
+    /**
+     * to load image
+     */
+    fun loadImage(url: String, view: ImageView) {
 
         Glide.with(view)
             .load(Uri.parse(url))

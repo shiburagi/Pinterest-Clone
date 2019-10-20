@@ -30,7 +30,6 @@
         <activity
             android:name=".ImagePreviewActivity"
             android:screenOrientation="sensorPortrait"
-            android:label="@string/title_activity_image_preview"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

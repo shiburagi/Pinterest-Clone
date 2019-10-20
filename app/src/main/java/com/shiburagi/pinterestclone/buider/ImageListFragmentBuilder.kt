@@ -9,12 +9,16 @@ import com.shiburagi.imageloader.ImageListFragment
 import com.shiburagi.pinterestclone.ImagePreviewActivity
 
 
+/**
+ * a single method to generate/create ImageList's fragment
+ * for multiple activity
+ */
 fun buildImageList(activity: Activity): ImageListFragment {
     val jsonUrls: Array<String> =
         arrayOf( "https://pastebin.com/raw/wgkJgazE","https://pastebin.com/raw/JVy8BtM1");
 
     return ImageListFragment()
-        .setOnRequest { length -> jsonUrls[((length / 10) % 2)] }
+        .setOnRequest { length -> jsonUrls[((length / 10) % 2)] } // return url to call for next images
         .setOnItemClickListener { view, image ->
             val intent = Intent(activity, ImagePreviewActivity::class.java);
             intent.putExtra(ImagePreviewActivity.IMAGE, image);
@@ -29,6 +33,6 @@ fun buildImageList(activity: Activity): ImageListFragment {
             } else {
                 activity.startActivity(intent);
             }
-        }
+        } // to handle click event on every image.
         .setMemorySize(activity, 10.0, 10.0);
 }

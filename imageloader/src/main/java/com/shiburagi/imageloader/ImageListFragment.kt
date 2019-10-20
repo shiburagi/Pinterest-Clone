@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,7 +22,9 @@ import com.shiburagi.utility.byte
 import com.shiburagi.utility.isOnline
 import kotlinx.android.synthetic.main.image_list_fragment.*
 
-
+/**
+ * Main Fragment to handle image list
+ */
 class ImageListFragment : Fragment() {
     private lateinit var viewModel: ImageListViewModel
 
@@ -51,6 +52,7 @@ class ImageListFragment : Fragment() {
                 .show();
         }
 
+        // to help the fragment detect if the list react to the end of list
         scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, _, _, _ ->
             val diff1 = parentLayout.bottom - (scrollView.height + scrollView.scrollY)
             if (diff1 == 0) {
@@ -59,6 +61,7 @@ class ImageListFragment : Fragment() {
 
         })
 
+        // to listen every data post to model
         viewModel.getData(onRequest!!(0)).observe(this, Observer {
 
             var leftHeight = leftLayout.height;
@@ -82,11 +85,17 @@ class ImageListFragment : Fragment() {
     }
 
     private var onItemClickListener: ((View, Image) -> Unit)? = null;
+    /**
+     * handle click event
+     */
     fun setOnItemClickListener(onItemClickListener: (View, Image) -> Unit): ImageListFragment {
         this.onItemClickListener = onItemClickListener;
         return this;
     }
 
+    /**
+     * a method to request/ get a url to call for next load
+     */
     private var onRequest: ((Int) -> String)? = null;
     fun setOnRequest(onRequest: (Int) -> String): ImageListFragment {
         this.onRequest = onRequest;
@@ -94,6 +103,10 @@ class ImageListFragment : Fragment() {
 
     }
 
+    /**
+     * a method to set the size of cache and memory of images.
+     * - the passing parameter value in MB
+     */
     @SuppressLint("VisibleForTests")
     fun setMemorySize(
         context: Context,

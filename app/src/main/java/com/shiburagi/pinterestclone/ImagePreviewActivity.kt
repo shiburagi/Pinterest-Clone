@@ -1,12 +1,9 @@
 package com.shiburagi.pinterestclone
 
 import android.graphics.Color
-import android.graphics.Point
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.shiburagi.imageloader.service.NetworkService
 import com.shiburagi.imageloader.entities.Image
@@ -26,16 +23,10 @@ class ImagePreviewActivity : AppCompatActivity() {
 
 
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "";
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setDisplayShowHomeEnabled(true);
 
         initialize();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            imageView.transitionName=
-                IMAGE_TRANSITION_NAME
-        };
 
         supportFragmentManager.beginTransaction()
             .replace(
@@ -46,20 +37,30 @@ class ImagePreviewActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * set value on certain views in this activity.
+     */
     private fun initialize(){
 
         val image = intent.getSerializableExtra(IMAGE) as Image;
 
         val service = NetworkService.instance;
 
-        service.getImage(image.urls?.small!!, imageView);
+        service.loadImage(image.urls?.small!!, imageView);
         imageView.setBackgroundColor( Color.parseColor(image.color?:"#ffffff"));
         imageView.setImageSize(image);
         titleTextView.visibility = View.GONE;
         usernameTextView.text = image.user?.username;
         followerTextView.visibility= View.GONE;
         descriptionTextView.text = "";
-        service.getImage(image.user?.profileImage?.medium!!, userImageView);
+        service.loadImage(image.user?.profileImage?.medium!!, userImageView);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.transitionName=
+                IMAGE_TRANSITION_NAME
+        };
+
 
     }
 
