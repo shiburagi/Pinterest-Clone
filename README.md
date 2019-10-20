@@ -18,8 +18,8 @@ This project build and develop using
 ## Test Case
 - using two different url, which will call alternate (by using this equation **(length/10) % 2**) when user scroll and reach the end of the screen, 
 - The image clickable, which open new page to view and enlarge.
-- the image will read from cache, if the image already load
-- the total image's height for left and right side should be at most one image's height
+- the image will read from cache, if already load
+- the different of total image's height for left and right side should be at most one image's height
 - Every image load independent, with different thread
 
 ## Preview
