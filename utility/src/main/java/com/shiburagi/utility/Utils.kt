@@ -21,5 +21,5 @@ val Int.px: Int
 
 
 val Double.byte: Double
-get()=this* 1024.0.pow(2.0);
+get()=this* 1024.0.pow(2.0)
 

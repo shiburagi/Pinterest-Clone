@@ -20,26 +20,26 @@ import kotlin.math.roundToInt
 class GridImageView(context: Context) : FrameLayout(context) {
 
     private val view: LinearLayout =
-        LayoutInflater.from(context).inflate(R.layout.image_view, this, false) as LinearLayout;
+        LayoutInflater.from(context).inflate(R.layout.image_view, this, false) as LinearLayout
 
     init {
-        addView(view);
+        addView(view)
     }
 
-    private var image: Image? = null;
+    private var image: Image? = null
 
     /**
      * pass @Image object to @GridImageView, then load the image.
      */
     fun setImage(image: Image): GridImageView {
         this.image = image
-        view.cardView.setCardBackgroundColor(Color.parseColor(image.color));
+        view.cardView.setCardBackgroundColor(Color.parseColor(image.color))
         view.imageView.setImageSize(image) { widthPixels ->
             widthPixels / 2.0 - 8.px
-        };
+        }
 
-        NetworkService.instance.loadImage(image.urls?.small!!, view.imageView);
-        return this;
+        NetworkService.instance.loadImage(image.urls?.small!!, view.imageView)
+        return this
     }
 
     /**
@@ -56,7 +56,7 @@ class GridImageView(context: Context) : FrameLayout(context) {
      * retrieve image's height
      */
     val imageHeight: Int
-        get() = view.imageView.layoutParams.height;
+        get() = view.imageView.layoutParams.height
 }
 
 
@@ -64,13 +64,13 @@ class GridImageView(context: Context) : FrameLayout(context) {
  * to preset @ImageView's height and width, to avoid the transition looks weird
  */
 fun ImageView.setImageSize(image: Image, calculateMaxWidth: (Double) -> Double) {
-    scaleType = ImageView.ScaleType.CENTER_CROP;
-    val display = context.resources.displayMetrics;
-    val imageWidth = image.width;
-    val imageHeight = image.height;
-    val maxWidth = calculateMaxWidth(display.widthPixels.toDouble());
-    val scale: Double = maxWidth / imageWidth.toDouble();
-    imageView.layoutParams.height = (imageHeight * scale).roundToInt();
+    scaleType = ImageView.ScaleType.CENTER_CROP
+    val display = context.resources.displayMetrics
+    val imageWidth = image.width
+    val imageHeight = image.height
+    val maxWidth = calculateMaxWidth(display.widthPixels.toDouble())
+    val scale: Double = maxWidth / imageWidth.toDouble()
+    imageView.layoutParams.height = (imageHeight * scale).roundToInt()
 }
 
 /**
@@ -78,6 +78,6 @@ fun ImageView.setImageSize(image: Image, calculateMaxWidth: (Double) -> Double) 
  */
 fun ImageView.setImageSize(image: Image) {
     setImageSize(image) { widthPixels ->
-        widthPixels;
+        widthPixels
     }
 }

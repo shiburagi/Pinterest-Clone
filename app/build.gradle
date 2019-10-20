@@ -38,4 +38,5 @@ dependencies {
     implementation 'com.mikhaellopez:circularimageview:4.0.2'
 
     implementation project(path: ':imageloader')
+    androidTestImplementation 'androidx.test:rules:1.2.0-beta01'
 }

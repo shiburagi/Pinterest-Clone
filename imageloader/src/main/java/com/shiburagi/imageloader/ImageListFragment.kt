@@ -29,7 +29,7 @@ class ImageListFragment : Fragment() {
     private lateinit var viewModel: ImageListViewModel
 
     companion object {
-        private var builder: GlideBuilder? = null;
+        private var builder: GlideBuilder? = null
     }
 
     override fun onCreateView(
@@ -39,42 +39,34 @@ class ImageListFragment : Fragment() {
     ): View? {
 
         if (onRequest == null)
-            throw  Exception("OnRequest not initialize");
+            throw  Exception("OnRequest not initialize")
 
         return inflater.inflate(R.layout.image_list_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ImageListViewModel();
+        viewModel = ImageListViewModel()
         if (!isOnline(context!!)) {
             Snackbar.make(parentLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG)
-                .show();
+                .show()
         }
 
-        // to help the fragment detect if the list react to the end of list
-        scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, _, _, _ ->
-            val diff1 = parentLayout.bottom - (scrollView.height + scrollView.scrollY)
-            if (diff1 == 0) {
-                viewModel.loadMore(onRequest!!(leftLayout.childCount + rightLayout.childCount));
-            }
-
-        })
+        setListen(scrollView)
 
         // to listen every data post to model
         viewModel.getData(onRequest!!(0)).observe(this, Observer {
 
-            var leftHeight = leftLayout.height;
-            var rightHeight = rightLayout.height;
-            it.forEach{image->
-                val view = GridImageView(context!!).setImage(image);
-                if (leftHeight>rightHeight) {
-                    rightLayout.addView(view);
-                    rightHeight+=view.imageHeight;
-                }
-                else {
-                    leftLayout.addView(view);
-                    leftHeight+=view.imageHeight;
+            var leftHeight = leftLayout.height
+            var rightHeight = rightLayout.height
+            it.forEach { image ->
+                val view = GridImageView(context!!).setImage(image)
+                if (leftHeight > rightHeight) {
+                    rightLayout.addView(view)
+                    rightHeight += view.imageHeight
+                } else {
+                    leftLayout.addView(view)
+                    leftHeight += view.imageHeight
 
                 }
 
@@ -84,22 +76,23 @@ class ImageListFragment : Fragment() {
         })
     }
 
-    private var onItemClickListener: ((View, Image) -> Unit)? = null;
+    private var onItemClickListener: ((View, Image) -> Unit)? = null
     /**
      * handle click event
      */
     fun setOnItemClickListener(onItemClickListener: (View, Image) -> Unit): ImageListFragment {
-        this.onItemClickListener = onItemClickListener;
-        return this;
+        this.onItemClickListener = onItemClickListener
+        return this
     }
 
     /**
      * a method to request/ get a url to call for next load
      */
-    private var onRequest: ((Int) -> String)? = null;
+    private var onRequest: ((Int) -> String)? = null
+
     fun setOnRequest(onRequest: (Int) -> String): ImageListFragment {
-        this.onRequest = onRequest;
-        return this;
+        this.onRequest = onRequest
+        return this
 
     }
 
@@ -119,17 +112,34 @@ class ImageListFragment : Fragment() {
             builder.setBitmapPool(LruBitmapPool(bitmapPoolMaxSize.byte.toLong()))
 
             builder.setLogLevel(Log.VERBOSE)
-            Glide.init(context, builder);
-            ImageListFragment.builder = builder;
+            Glide.init(context, builder)
+            ImageListFragment.builder = builder
         } else {
-            val builder = builder!!;
+            val builder = builder!!
 
             builder.setMemoryCache(LruResourceCache(memoryCacheSize.byte.toLong()))
             builder.setBitmapPool(LruBitmapPool(bitmapPoolMaxSize.byte.toLong()))
 
 
         }
-        return this;
+        return this
 
     }
+
+    /**
+     * to help the fragment detect if the list react to the end of list
+     */
+    fun setListen(scrollView: NestedScrollView): ImageListFragment {
+        val child = scrollView.getChildAt(0)
+        scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, _, _, _ ->
+            val diff = child.bottom - (scrollView.height + scrollView.scrollY)
+            if (diff == 0) {
+                viewModel.loadMore(onRequest!!(leftLayout.childCount + rightLayout.childCount))
+            }
+
+        })
+        return this
+
+    }
+
 }

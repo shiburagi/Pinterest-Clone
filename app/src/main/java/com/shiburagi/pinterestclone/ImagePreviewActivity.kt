@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.content_image_preview.*
 
 class ImagePreviewActivity : AppCompatActivity() {
     companion object {
-        const val IMAGE = "IMAGE";
-        const val IMAGE_TRANSITION_NAME = "IMAGE_TRANSITION_NAME";
+        const val IMAGE = "IMAGE"
+        const val IMAGE_TRANSITION_NAME = "IMAGE_TRANSITION_NAME"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,15 +23,15 @@ class ImagePreviewActivity : AppCompatActivity() {
 
 
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        initialize();
+        initialize()
 
         supportFragmentManager.beginTransaction()
             .replace(
                 R.id.container_fragment,
-                buildImageList(this)
+                buildImageList(this).setListen(scrollView)
             )
             .commitNow()
 
@@ -42,31 +42,31 @@ class ImagePreviewActivity : AppCompatActivity() {
      */
     private fun initialize(){
 
-        val image = intent.getSerializableExtra(IMAGE) as Image;
+        val image = intent.getSerializableExtra(IMAGE) as Image
 
-        val service = NetworkService.instance;
+        val service = NetworkService.instance
 
-        service.loadImage(image.urls?.small!!, imageView);
-        imageView.setBackgroundColor( Color.parseColor(image.color?:"#ffffff"));
-        imageView.setImageSize(image);
-        titleTextView.visibility = View.GONE;
-        usernameTextView.text = image.user?.username;
-        followerTextView.visibility= View.GONE;
-        descriptionTextView.text = "";
-        service.loadImage(image.user?.profileImage?.medium!!, userImageView);
+        service.loadImage(image.urls?.small!!, imageView)
+        imageView.setBackgroundColor( Color.parseColor(image.color?:"#ffffff"))
+        imageView.setImageSize(image)
+        titleTextView.visibility = View.GONE
+        usernameTextView.text = image.user?.username
+        followerTextView.visibility= View.GONE
+        descriptionTextView.text = ""
+        service.loadImage(image.user?.profileImage?.medium!!, userImageView)
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imageView.transitionName=
                 IMAGE_TRANSITION_NAME
-        };
+        }
 
 
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed();
-        return true;
+        onBackPressed()
+        return true
     }
 
 

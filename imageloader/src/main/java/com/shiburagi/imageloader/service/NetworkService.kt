@@ -15,12 +15,12 @@ import java.io.IOException
 
 
 class NetworkService private constructor() {
-    val cacheUrl: HashMap<String, String?> = HashMap();
-    val gson = Gson();
+    val cacheUrl: HashMap<String, String?> = HashMap()
+    val gson = Gson()
     private var client = OkHttpClient()
     companion object{
         // singleton
-        val instance = NetworkService();
+        val instance = NetworkService()
     }
 
     /**
@@ -30,7 +30,7 @@ class NetworkService private constructor() {
      */
     fun getData(url: String, onComplete: (List<Image>?) -> Unit) {
         if (cacheUrl.containsKey(url))
-            onComplete(toObject(cacheUrl[url]));
+            onComplete(toObject(cacheUrl[url]))
         else {
             val request = Request.Builder()
                 .url(url)
@@ -43,8 +43,8 @@ class NetworkService private constructor() {
                         override fun onResponse(call: okhttp3.Call, response: Response) {
                             runOnUiThread {
                                 if (response.code == 200) {
-                                    cacheUrl[url] = response.body?.string();
-                                    onComplete(toObject(cacheUrl[url]));
+                                    cacheUrl[url] = response.body?.string()
+                                    onComplete(toObject(cacheUrl[url]))
                                 }
                             }
                         }
@@ -64,7 +64,7 @@ class NetworkService private constructor() {
      * a wrapper to execute UI thread method
      */
     private fun runOnUiThread(callback: () -> Unit) {
-        Handler(Looper.getMainLooper()).post { callback(); }
+        Handler(Looper.getMainLooper()).post { callback() }
     }
 
     /**
@@ -75,7 +75,7 @@ class NetworkService private constructor() {
         Glide.with(view)
             .load(Uri.parse(url))
             .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .into(view);
+            .into(view)
 
     }
 }
