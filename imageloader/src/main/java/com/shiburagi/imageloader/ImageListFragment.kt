@@ -61,10 +61,12 @@ class ImageListFragment : Fragment() {
             var rightHeight = rightLayout.height
             it.forEach { image ->
                 val view = GridImageView(context!!).setImage(image)
-                if (leftHeight > rightHeight) {
+
+                // to identify which side has less height
+                if (leftHeight > rightHeight) { //if the right size has less height, then view will add in right side;
                     rightLayout.addView(view)
                     rightHeight += view.imageHeight
-                } else {
+                } else { // otherwise, view will add in left side;
                     leftLayout.addView(view)
                     leftHeight += view.imageHeight
 
